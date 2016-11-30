@@ -1,0 +1,30 @@
+.main-content {
+    background: #fff;
+    padding: 40px 20px 20px 20px;
+    margin-top: -6px;
+    margin-bottom: -6px;
+    height: 100%;
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.10);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.10);
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.10);
+}
+
+.section-title {
+    color: #888;
+}
+
+.movies-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.movie-card {
+    margin: 0 30px 10px 0;
+    height: 256px;
+}
+
+.mdl-card__title {
+    background-size: cover;
+    height: 180px;
+}

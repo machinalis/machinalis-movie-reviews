@@ -1,0 +1,22 @@
+.main-content {
+    padding: 40px 20px 20px 20px;
+    margin-top: -6px;
+    margin-bottom: -6px;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background: #fff;
+    padding: 20px;
+    width: 50%;
+    margin-top: -25%;
+    display: flex;
+    justify-content: center;
+    -webkit-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.10);
+    -moz-box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.10);
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,0.10);
+}
