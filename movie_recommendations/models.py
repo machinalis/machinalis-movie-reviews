@@ -2,7 +2,21 @@
 movie_recommendations models
 """
 
+from flask_security import RoleMixin, UserMixin
+
 from movie_recommendations import db
+
+# A table to link users to roles
+roles_users = db.Table('roles_users',
+        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+
+
+class Role(db.Model, RoleMixin):
+    """User role"""
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
 
 
 # A table to track follows
@@ -13,25 +27,32 @@ follows = db.Table('follows',
 )
 
 
-class User(db.Model):
-    """A user of the movie_recommendations site"""
+class User(db.Model, UserMixin):
+    """A movie_recommendations user"""
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
     username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
+    email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
     follows = db.relationship('User', secondary=follows, primaryjoin=id == follows.c.user_id,
                               secondaryjoin=id == follows.c.followed_id,
                               backref=db.backref('followers', lazy='dynamic'))
 
-    def __init__(self, username, email, password=None):
-        self.username = username
-        self.email = email
-        self.password = password
-
     def __repr__(self):
-        return '<User(id={id}, username={username}, email={email}>)'.format(id=self.id,
-                                                                            username=self.username,
-                                                                            email=self.email)
+        return ('<User('
+                'id={id}, '
+                'name={name}, '
+                'username={username}, '
+                'email={email}, '
+                'active={active}, '
+                'confirmed_at={confirmed_at}, '
+                'roles={roles}>, '
+                ')').format(id=self.id, name=self.name, username=self.username, email=self.email,
+                            active=self.active, confirmed_at=self.confirmed_at, roles=self.roles)
 
 
 # A table to track movie likes

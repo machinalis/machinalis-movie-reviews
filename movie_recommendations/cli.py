@@ -9,7 +9,7 @@ from random import randint
 
 from sqlalchemy.sql.expression import func
 
-from movie_recommendations import app, db, factories, models
+from movie_recommendations import app, db, factories, models, user_datastore
 
 
 @app.cli.command('init_db')
@@ -55,17 +55,32 @@ def import_movie_dataset(movie_dataset_path):
 @app.cli.command('generate_user_network')
 def generate_user_network():
     """Generates a random set of users and its connections"""
-    click.echo("Dropping existing user entries...")
+    click.echo('Dropping existing user entries...')
     models.User.query.delete()
 
-    click.echo("Generating fake users...")
-    users = factories.UserFactory.build_batch(25)
-    db.session.bulk_save_objects(users)
+    click.echo('Generating user1, user2, user3, and user4 accounts...')
+    for i in range(1, 5):
+        user_datastore.create_user(name='User {}'.format(i), username='user{}'.format(i),
+                                   email='user{}@movie-recommendations.local'.format(i),
+                                   password='user{}'.format(i))
     db.session.commit()
 
+    click.echo("Generating additional fake user accounts...")
+
+    for _ in range(25):
+        user_datastore.create_user(**factories.get_fake_user_data())
+    db.session.commit()
+
+    click.echo("Population fake user connections...")
+
     for _ in range(10):
-        user = models.User.query.filter(models.User.follows == None).order_by(func.random()).limit(1).one()
-        follows = models.User.query.filter(models.User.id != user.id).order_by(func.random()).limit(randint(1,5)).all()
+        user = (models.User.query
+                .filter(models.User.follows == None)
+                .filter(~models.User.username.like('user%'))
+                .order_by(func.random()).limit(1).one())
+        follows = (models.User.query
+                   .filter(models.User.id != user.id)
+                   .order_by(func.random()).limit(randint(1,5)).all())
         user.follows = follows
         db.session.merge(user)
 
