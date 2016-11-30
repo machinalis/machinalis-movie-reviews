@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block extraheader %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-box">
+    <form action="/login" method="POST">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="username">
+            <label class="mdl-textfield__label" for="username">Username</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="password" id="Password">
+            <label class="mdl-textfield__label" for="Password">Password</label>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
+            Login
+        </button>
+    </form>
+</div>
+
+{% endblock %}
+
