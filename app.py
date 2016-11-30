@@ -17,6 +17,12 @@ db = SQLAlchemy(app)
 # Models
 #
 
+follows = db.Table('follows',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), index=True),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id')),
+    db.UniqueConstraint('user_id', 'followed_id', name='unique_follows')
+)
+
 
 class User(db.Model):
     """A user of the machinalis-movie-reviews site"""
@@ -24,6 +30,9 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(255))
+    follows = db.relationship('User', secondary=follows, primaryjoin=id == follows.c.user_id,
+                              secondaryjoin=id == follows.c.followed_id,
+                              backref=db.backref('followers', lazy='dynamic'))
 
     def __init__(self, username, email, password=None):
         self.username = username
@@ -34,6 +43,13 @@ class User(db.Model):
         return 'User[id={id}, username={username}, email={email}]'.format(id=self.id,
                                                                           username=self.username,
                                                                           email=self.email)
+
+
+likes = db.Table('likes',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), index=True),
+    db.Column('movie_id', db.Integer, db.ForeignKey('movie.id'), index=True),
+    db.UniqueConstraint('user_id', 'movie_id', name='unique_likes')
+)
 
 
 class Movie(db.Model):
@@ -53,6 +69,7 @@ class Movie(db.Model):
     title_year = db.Column(db.String(4))
     imdb_score = db.Column(db.Float)
     movie_facebook_likes = db.Column(db.BigInteger)
+    likes = db.relationship('User', secondary=likes, backref=db.backref('likes', lazy='dynamic'))
 
     def __init__(self, movie_title, duration=None, director_name=None, actor_1_name=None,
                  actor_2_name=None, actor_3_name=None, genres=None, movie_imdb_link=None,
