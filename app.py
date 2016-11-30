@@ -1,10 +1,17 @@
 import click
 
+import factory
+
 from csv import DictReader
+from random import randint
 
 from flask import Flask
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
+
+from sqlalchemy.sql.expression import func
+
+from faker import Faker
 
 import settings
 
@@ -39,10 +46,10 @@ class User(db.Model):
         self.email = email
         self.password = password
 
-    def __str__(self):
-        return 'User[id={id}, username={username}, email={email}]'.format(id=self.id,
-                                                                          username=self.username,
-                                                                          email=self.email)
+    def __repr__(self):
+        return '<User(id={id}, username={username}, email={email}>)'.format(id=self.id,
+                                                                            username=self.username,
+                                                                            email=self.email)
 
 
 likes = db.Table('likes',
@@ -90,8 +97,8 @@ class Movie(db.Model):
         self.imdb_score = imdb_score
         self.movie_facebook_likes = movie_facebook_likes
 
-    def __str__(self):
-        return ('Movie['
+    def __repr__(self):
+        return ('<Movie('
                 'id={id}, '
                 'movie_title={movie_title}, '
                 'duration={duration}, '
@@ -106,13 +113,32 @@ class Movie(db.Model):
                 'title_year={title_year}, '
                 'imdb_score={imdb_score}, '
                 'movie_facebook_likes={movie_facebook_likes}'
-                ']').format(id=self.id, movie_title=self.movie_title, duration=self.duration,
+                ')>').format(id=self.id, movie_title=self.movie_title, duration=self.duration,
                             director_name=self.director_name, actor_1_name=self.actor_1_name,
                             actor_2_name=self.actor_2_name, actor_3_name=self.actor_3_name,
                             genres=self.genres, movie_imdb_link=self.movie_imdb_link,
                             language=self.language, country=self.country,
                             title_year=self.title_year, imdb_score=self.imdb_score,
                             movie_facebook_likes=self.movie_facebook_likes)
+
+
+#
+# Factories
+#
+
+
+faker = Faker()
+
+
+class UserFactory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        model = User
+        sqlalchemy_session = db.session
+
+    username = factory.LazyAttribute(lambda _: faker.user_name())
+    email = factory.LazyAttribute(lambda _: faker.email())
+    password = 's3cr4t5'
+
 
 #
 # Database
@@ -156,6 +182,28 @@ def import_movie_dataset(movie_dataset_path):
                    for row in reader ]
         db.session.bulk_save_objects(movies)
         db.session.commit()
+
+
+@app.cli.command('generate_user_network')
+def generate_user_network():
+    """Generates a random set of users and its connections"""
+    click.echo("Dropping existing user entries...")
+    User.query.delete()
+
+    click.echo("Generating fake users...")
+    users = UserFactory.build_batch(25)
+    db.session.bulk_save_objects(users)
+    db.session.commit()
+
+    for _ in range(10):
+        user = User.query.filter(User.follows == None).order_by(func.random()).limit(1).one()
+        click.echo('user = {}'.format(user))
+        follows = User.query.filter(User.id != user.id).order_by(func.random()).limit(randint(1,5)).all()
+        user.follows = follows
+        click.echo('follows = {}'.format(follows))
+        db.session.merge(user)
+
+    db.session.commit()
 
 
 #
