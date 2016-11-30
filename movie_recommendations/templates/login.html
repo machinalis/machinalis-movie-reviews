@@ -7,15 +7,17 @@
 {% block content %}
 
 <div class="login-box">
+    <h3 class="section-title mdl-typography--display-1">Login</h3>
+
     <form action="/login" method="POST">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="text" id="username">
             <label class="mdl-textfield__label" for="username">Username</label>
-        </div>
+        </div><br />
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="password" id="Password">
             <label class="mdl-textfield__label" for="Password">Password</label>
-        </div>
+        </div> <br />
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect">
             Login
         </button>
