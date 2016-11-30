@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block extraheader %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-box">
+    <h3 class="section-title mdl-typography--display-1"> Your Profile </h3>
+
+    <div class="mdl-grid">
+        <div class="profile-picture mdl-cell mdl-cell--4-col">
+            <img src="{{ url_for('static', filename='imgs/default_user.jpg') }}" />
+        </div>
+        <div class="mdl-cell mdl-cell--8-col">
+            <div class="">Name and surname</div>
+            <div class="">Email</div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
