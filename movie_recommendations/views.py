@@ -36,8 +36,11 @@ def like(movie_id):
         abort(404)
 
     if current_user in movie.likes:
+        movie.likes.remove(current_user)
+    else:
         movie.likes.append(current_user)
-        db.session.merge(movie)
-        db.session.commit()
+
+    db.session.merge(movie)
+    db.session.commit()
 
     return jsonify({'movie_id': movie_id, 'likes': len(movie.likes)})
