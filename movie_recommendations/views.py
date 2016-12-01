@@ -2,11 +2,11 @@
 movie_recommendations views
 """
 
-from flask import render_template, jsonify, abort
+from flask import render_template, jsonify
 from flask_security import login_required, current_user
 
 from movie_recommendations import app, db
-from movie_recommendations.models import Movie
+from movie_recommendations.models import Movie, User
 
 
 @app.route('/')
@@ -33,7 +33,7 @@ def like(movie_id):
 
     if not movie:
         app.logger.debug('Movie not found. movie_id = %s', movie_id)
-        abort(404)
+        return jsonify({'error': 'Movie not found: {}'.format(movie_id)}), 404
 
     if current_user in movie.likes:
         movie.likes.remove(current_user)
@@ -44,3 +44,33 @@ def like(movie_id):
     db.session.commit()
 
     return jsonify({'movie_id': movie_id, 'likes': len(movie.likes)})
+
+
+@app.route('/follow/<int:followed_id>', methods=['POST'])
+@login_required
+def follow(followed_id):
+    """Updates the "follow" status of a user for a given user."""
+    app.logger.debug('follow. followed_id = %s', followed_id)
+
+    if followed_id == current_user.id:
+        return jsonify({'error': 'Cannot follow self'}), 400
+
+    followed = User.query.get(followed_id)
+
+    app.logger.debug('followed = %s', followed)
+
+    if not followed:
+        app.logger.debug('User not found. followed = %s', followed)
+        return jsonify({'error': 'User not found: {}'.format(followed_id)}), 404
+
+    if followed in current_user.follows:
+        current_user.follows.remove(followed)
+    else:
+        current_user.follows.append(followed)
+
+    db.session.merge(current_user)
+    db.session.commit()
+
+    return jsonify(
+        {'user_id': current_user.id, 'followed_id': followed_id,
+         'follows': len(current_user.follows)})
