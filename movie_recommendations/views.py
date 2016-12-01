@@ -5,7 +5,7 @@ movie_recommendations views
 from flask import render_template, jsonify
 from flask_security import login_required, current_user
 
-from movie_recommendations import app, db, ma
+from movie_recommendations import app, db
 from movie_recommendations.models import Movie, User, movies_schema
 from movie_recommendations.recommendation_engines import get_recommendations
 
