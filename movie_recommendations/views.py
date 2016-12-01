@@ -2,7 +2,9 @@
 movie_recommendations views
 """
 
-from flask import render_template, jsonify
+import requests
+
+from flask import render_template, jsonify, redirect, url_for
 from flask_security import login_required, current_user
 
 from movie_recommendations import app, db
@@ -13,7 +15,13 @@ from movie_recommendations.recommendation_engines import get_recommendations
 @app.route('/')
 @login_required
 def index():
-    return render_template('index.html')
+    limit = app.config.get('RECOMMENDATIONS_LIMIT', 5)
+    context = {
+        "recommendations": get_recommendations(current_user, limit),
+        "likes": list(current_user.likes),
+        "most_viewed": Movie.query.order_by('imdb_score DESC').limit(limit)
+    }
+    return render_template('index.html', **context)
 
 
 @app.route('/profile')
@@ -87,3 +95,11 @@ def recommendations():
     recommendations_json = movies_schema.dump(recommendations).data
 
     return jsonify(recommendations_json)
+
+
+@app.route('/poster/<int:movie_id>')
+def poster(movie_id):
+    movie = Movie.query.get(movie_id)
+    url = "http://www.omdbapi.com/?t={}&y=&plot=short&r=json".format(movie.movie_title)
+    data = requests.get(url).json()
+    return redirect(data.get("Poster", url_for("static", filename="imgs/default_poster.png")))
