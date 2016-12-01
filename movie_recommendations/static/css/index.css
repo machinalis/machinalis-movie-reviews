@@ -22,3 +22,12 @@
     background-size: cover;
     height: 280px;
 }
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.like-button {
+    color: red !important;
+}
