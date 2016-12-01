@@ -25,9 +25,11 @@ def index():
 
 
 @app.route('/profile')
+@app.route('/profile/<string:username>')
 @login_required
-def profile():
-    return render_template('profile.html', user=current_user)
+def profile(username=None):
+    user = User.query.filter(User.username == username).first() or current_user
+    return render_template('profile.html', user=user)
 
 
 @app.route('/like/<int:movie_id>', methods=['POST'])

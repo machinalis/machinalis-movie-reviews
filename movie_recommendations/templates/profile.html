@@ -13,9 +13,9 @@
             <img src="{{ url_for('static', filename='imgs/default_user.jpg') }}" />
         </div>
         <div class="profile-picture mdl-cell mdl-cell--4-col mdl-cell--4-offset">
+            <div class="profile-name">{{ user.name }}</div>
             <div class="">{{ user.username }}</div>
             <div class="">{{ user.email }}</div>
-
         </div>
     </div>
 </div>
