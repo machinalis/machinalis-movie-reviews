@@ -29,7 +29,17 @@ def index():
 @login_required
 def profile(username=None):
     user = User.query.filter(User.username == username).first() or current_user
-    return render_template('profile.html', user=user)
+    is_self_profile = user.id == current_user.id
+    is_following = False
+    if not is_self_profile:
+        is_following = user.id in [x.id for x in current_user.follows]
+
+    context = {
+        "user": user,
+        "is_self_profile": is_self_profile,
+        "is_following": is_following
+    }
+    return render_template('profile.html', **context)
 
 
 @app.route('/like/<int:movie_id>', methods=['POST'])
