@@ -9,12 +9,12 @@
     <h3 class="section-title mdl-typography--display-1"> Your Profile </h3>
 
     <div class="mdl-grid">
-        <div class="profile-picture mdl-cell mdl-cell--4-col">
+        <div class="profile-picture mdl-cell mdl-cell--4-col mdl-cell--4-offset">
             <img src="{{ url_for('static', filename='imgs/default_user.jpg') }}" />
         </div>
-        <div class="mdl-cell mdl-cell--8-col">
-            <div class="">Name and surname</div>
-            <div class="">Email</div>
+        <div class="profile-picture mdl-cell mdl-cell--4-col mdl-cell--4-offset">
+            <div class="">{{ user.username }}</div>
+            <div class="">{{ user.email }}</div>
 
         </div>
     </div>
