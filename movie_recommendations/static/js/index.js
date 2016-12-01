@@ -3,6 +3,8 @@ $(document).ready(function() {
 });
 
 function on_like_clicked(event) {
+  event.preventDefault();
+
   var $button = $(this);
   var $movie = $button.parents(".movie-card");
   var movie_id = $movie.data("movie-id");
@@ -11,7 +13,10 @@ function on_like_clicked(event) {
     url: "/like/" + movie_id,
     method: "POST",
     success: function(result) {
-      $button.find(".material-icons").text("favorite");
+      var $icon = $button.find(".material-icons")
+      var text = $icon.text()
+      var new_value = text.trim().toLowerCase() === "favorite" ? "favorite_border" : "favorite";
+      $icon.text(new_value);
     }
   });
 }

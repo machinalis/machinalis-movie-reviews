@@ -18,9 +18,11 @@
         <h3 class="section-title mdl-typography--display-1">Your Likes</h3>
         <hr />
         <div class="movies-list">
-            {% for movie in likes %}
-                {% include "movie-item.html" %}
-            {% endfor %}
+            {% with liked=true %}
+                {% for movie in likes %}
+                    {% include "movie-item.html" %}
+                {% endfor %}
+            {% endwith %}
         </div>
     {% endif %}
 
