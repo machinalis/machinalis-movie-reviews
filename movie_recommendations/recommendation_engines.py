@@ -7,11 +7,6 @@ from sqlalchemy.sql.expression import func
 from movie_recommendations import app, db, models
 
 
-def no_recommendations(user):
-    """Returns no recommendations"""
-    []
-
-
 def random_choice(user):
     """Picks a random set of movies"""
     return models.Movie.query.order_by(func.random())
@@ -26,6 +21,15 @@ def recommend_by_likes(user):
     """Picks movies based on how many likes it has"""
     return db.session.query(models.Movie, func.count(models.likes.c.user_id).label('total_likes'))\
         .join(models.likes).group_by(models.Movie).order_by('total_likes DESC')
+
+
+def recommend_by_follows(user):
+    """Picks movies based on the movies liked by users followed by the current user"""
+    return db.session.query(models.Movie).join(models.likes).join(models.User)\
+        .filter(models.likes.c.user_id == models.User.id)\
+        .join(models.follows, models.follows.c.followed_id == models.likes.c.user_id)\
+        .filter(models.follows.c.user_id == user.id)\
+        .filter(models.likes.c.user_id != user.id)
 
 
 def recommend_by_imdb_score(user):
