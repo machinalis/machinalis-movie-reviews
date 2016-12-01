@@ -5,8 +5,9 @@ movie_recommendations views
 from flask import render_template, jsonify
 from flask_security import login_required, current_user
 
-from movie_recommendations import app, db
-from movie_recommendations.models import Movie, User
+from movie_recommendations import app, db, ma
+from movie_recommendations.models import Movie, User, movies_schema
+from movie_recommendations.recommendation_engines import get_recommendations
 
 
 @app.route('/')
@@ -74,3 +75,15 @@ def follow(followed_id):
     return jsonify(
         {'user_id': current_user.id, 'followed_id': followed_id,
          'follows': len(current_user.follows)})
+
+
+@app.route('/recommendations')
+@login_required
+def recommendations():
+    """Returns a list of movie recommendations for the logged-in user."""
+    app.logger.debug('recommendations')
+
+    recommendations = get_recommendations(current_user, app.config.get('RECOMMENDATIONS_LIMIT', 5))
+    recommendations_json = movies_schema.dump(recommendations).data
+
+    return jsonify(recommendations_json)
