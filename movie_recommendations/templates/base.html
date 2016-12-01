@@ -24,15 +24,19 @@
                     <!-- Add spacer, to align navigation to the right -->
                     <div class="mdl-layout-spacer"></div>
                     <!-- Navigation -->
+                    {% if current_user.is_authenticated %}
                     <nav class="mdl-navigation">
-                        <a class="mdl-navigation__link" href="/login">Login</a>
+                        <a class="mdl-navigation__link" href="{{ url_for_security('logout') }}">Logout</a>
                     </nav>
+                    {% endif %}
                 </div>
             </header>
             <div class="mdl-layout__drawer">
+                {% if current_user.is_authenticated %}
                 <nav class="mdl-navigation">
-                    <a class="mdl-navigation__link" href="/login">Login</a>
+                    <a class="mdl-navigation__link" href="{{ url_for_security('logout') }}">Logout</a>
                 </nav>
+                {% endif %}
             </div>
             <main class="mdl-layout__content">
                 <div class="mdl-grid">
