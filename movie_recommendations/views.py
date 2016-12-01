@@ -15,7 +15,7 @@ from movie_recommendations.recommendation_engines import get_recommendations
 @app.route('/')
 @login_required
 def index():
-    limit = app.config.get('RECOMMENDATIONS_LIMIT', 5)
+    limit = app.config.get('RECOMMENDATIONS_LIMIT', 6)
     context = {
         "recommendations": get_recommendations(current_user, limit),
         "likes": list(current_user.likes),
