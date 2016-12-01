@@ -3,6 +3,7 @@ movie_recommendations models
 """
 
 from flask_security import RoleMixin, UserMixin
+from marshmallow_sqlalchemy import ModelSchema
 
 from movie_recommendations import db
 
@@ -124,3 +125,10 @@ class Movie(db.Model):
                              language=self.language, country=self.country,
                              title_year=self.title_year, imdb_score=self.imdb_score,
                              movie_facebook_likes=self.movie_facebook_likes)
+
+
+class MovieSchema(ModelSchema):
+    class Meta:
+        model = Movie
+movie_schema = MovieSchema()
+movies_schema = MovieSchema(many=True)

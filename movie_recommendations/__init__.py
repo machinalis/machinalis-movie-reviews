@@ -5,12 +5,14 @@ movie_recommendations app module
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore
+from flask_marshmallow import Marshmallow
 
 # Flask app set-up
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 
 import movie_recommendations.models
 
