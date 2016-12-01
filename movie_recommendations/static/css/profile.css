@@ -6,3 +6,8 @@
 .profile-picture img {
     width: 100%;
 }
+
+.profile-name {
+    font-size: 1.5em;
+    font-weight: bold;
+}
