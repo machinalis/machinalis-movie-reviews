@@ -5,15 +5,20 @@
 .movies-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
 .movie-card {
     margin: 0 10px 10px 0;
-    height: 256px;
+    min-height: 256px;
+}
+
+.movie-title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .mdl-card__title {
     background-size: cover;
-    height: 180px;
+    height: 280px;
 }

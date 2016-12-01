@@ -26,6 +26,8 @@
                     <!-- Navigation -->
                     {% if current_user.is_authenticated %}
                     <nav class="mdl-navigation">
+                        <a class="mdl-navigation__link" href="{{ url_for('index') }}">Home</a>
+                        <a class="mdl-navigation__link" href="{{ url_for('profile') }}">Profile</a>
                         <a class="mdl-navigation__link" href="{{ url_for_security('logout') }}">Logout</a>
                     </nav>
                     {% endif %}
@@ -34,13 +36,15 @@
             <div class="mdl-layout__drawer">
                 {% if current_user.is_authenticated %}
                 <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="{{ url_for('index') }}">Home</a>
+                    <a class="mdl-navigation__link" href="{{ url_for('profile') }}">Profile</a>
                     <a class="mdl-navigation__link" href="{{ url_for_security('logout') }}">Logout</a>
                 </nav>
                 {% endif %}
             </div>
             <main class="mdl-layout__content">
                 <div class="mdl-grid">
-                    <div class="main-content mdl-cell mdl-cell--6-col mdl-cell--3-offset-desktop mdl-cell--10-col-tablet">
+                    <div class="main-content mdl-cell mdl-cell--9-col mdl-cell--1-offset-desktop mdl-cell--10-col-tablet">
                         <div class="content-box">
                             {% block content %} {% endblock %}
                         </div>
