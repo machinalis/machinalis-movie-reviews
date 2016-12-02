@@ -1,0 +1,10 @@
+.login-box form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-box h3{
+    text-align: center;
+    color: #888;
+}

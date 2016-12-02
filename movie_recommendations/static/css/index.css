@@ -1,0 +1,33 @@
+.section-title {
+    color: #888;
+}
+
+.movies-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.movie-card {
+    margin: 0 10px 10px 0;
+    min-height: 256px;
+}
+
+.movie-title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.mdl-card__title {
+    background-size: cover;
+    height: 280px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.like-button {
+    color: red !important;
+}

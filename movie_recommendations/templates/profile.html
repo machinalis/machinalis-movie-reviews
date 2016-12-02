@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block extraheader %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <script defer src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="profile-box">
+    <h3 class="section-title mdl-typography--display-1"> Your Profile </h3>
+
+    <div class="mdl-grid">
+        <div class="profile-picture mdl-cell mdl-cell--4-col mdl-cell--4-offset">
+            <img src="{{ url_for('static', filename='imgs/default_user.jpg') }}" />
+        </div>
+        <div class="profile-picture mdl-cell mdl-cell--4-col mdl-cell--4-offset">
+            <div class="profile-name">{{ user.name }}</div>
+            <div class="">{{ user.username }}</div>
+            <div class="">{{ user.email }}</div>
+
+            {% if user.follows %}
+                <br /> <br />
+                <div class="follow-list">
+                    <strong> Following to: </strong>
+                    <ul>
+                        {% for follow in user.follows %}
+                            <li> {{ follow.username }} </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if not is_self_profile %}
+                <form action="/follow/{{ user.id }}" method="POST" id="follow-form">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+                        {% if is_following %} Unfollow {% else %} Follow {% endif %}
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

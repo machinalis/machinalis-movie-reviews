@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title> Machinalis Movie Recomendation </title>
+
+        <!-- Material Design -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+        <!-- Jquery -->
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+
+        <!-- Our css -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
+        {% block extraheader %}{% endblock %}
+    </head>
+    <body>
+        <div class="main mdl-layout mdl-js-layout">
+            <header class="mdl-layout__header mdl-layout__header--scroll">
+                <div class="mdl-layout__header-row">
+                    <!-- Title -->
+                    <span class="mdl-layout-title">Machinalis Movie Recommendation</span>
+                    <!-- Add spacer, to align navigation to the right -->
+                    <div class="mdl-layout-spacer"></div>
+                    <!-- Navigation -->
+                    {% if current_user.is_authenticated %}
+                    <nav class="mdl-navigation">
+                        <a class="mdl-navigation__link" href="{{ url_for('index') }}">Home</a>
+                        <a class="mdl-navigation__link" href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
+                        <a class="mdl-navigation__link" href="{{ url_for_security('logout') }}">Logout</a>
+                    </nav>
+                    {% endif %}
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                {% if current_user.is_authenticated %}
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="{{ url_for('index') }}">Home</a>
+                    <a class="mdl-navigation__link" href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
+                    <a class="mdl-navigation__link" href="{{ url_for_security('logout') }}">Logout</a>
+                </nav>
+                {% endif %}
+            </div>
+            <main class="mdl-layout__content">
+                <div class="mdl-grid">
+                    <div class="main-content mdl-cell mdl-cell--9-col mdl-cell--1-offset-desktop mdl-cell--10-col-tablet">
+                        <div class="content-box">
+                            {% block content %} {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+
+        <!-- Trianglify for background -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/1.0.1/trianglify.min.js"></script>
+        <script>
+            var canvas = Trianglify({
+                height: window.innerHeight,
+                width: window.innerWidth,
+                cell_size: 70,
+                variance: 0.7,
+                palette: Trianglify.colorbrewer,
+                x_colors: 'Blues',
+                y_colors: 'match_x'
+            }).canvas();
+            document.body.style.backgroundImage = "url(" + canvas.toDataURL() + ")";
+        </script>
+    </body>
+</html>
+
