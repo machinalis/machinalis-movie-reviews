@@ -31,11 +31,9 @@
             {% endif %}
 
             {% if not is_self_profile %}
-                <form action="/follow/{{ user.id }}" method="POST" id="follow-form">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
-                        {% if is_following %} Unfollow {% else %} Follow {% endif %}
-                    </button>
-                </form>
+                <button class="follow-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored" data-api-url="/follow/{{ user.id }}" >
+                    {% if is_following %} Unfollow {% else %} Follow {% endif %}
+                </button>
             {% endif %}
         </div>
     </div>

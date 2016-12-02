@@ -1,14 +1,14 @@
 $(document).ready(function() {
-  $("#follow-form").submit(on_form_submit);
+  $(".follow-button").click(on_follow_click);
 });
 
-function on_form_submit() {
+function on_follow_click(event) {
   event.preventDefault();
-  var $form = $(this);
+  var $this = $(this);
+
   $.ajax({
-    type: $form.attr('method'),
-    url: $form.attr('action'),
-    data: $form.serialize(),
+    type: "post",
+    url: $this.data("api-url"),
     success: function (data) {
       location.reload();
     }
