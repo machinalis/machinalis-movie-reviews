@@ -34,7 +34,7 @@ def recommend_by_follows(user):
 
 def recommend_by_imdb_score(user):
     """Recommends movies based on their IMDB score"""
-    return models.Movie.query.order_by('imdb_score DESC')
+    return models.Movie.query.order_by(models.Movie.imdb_score.desc())
 
 
 def only_the_best(user):

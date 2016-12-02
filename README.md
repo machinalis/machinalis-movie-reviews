@@ -19,11 +19,17 @@ Generating the Database
 2. Fill it with mock data: ```$ flask generate_user_network```
 3. (optional) Fill it with a dataset info:
     1. Download the dataset from: [https://www.kaggle.com/deepmatrix/imdb-5000-movie-dataset]()
-    2. Import it using: ```$ flask import_movie_dataset movie_metadata.csv```
+    2. Import it using: ```$ flask import_movie_dataset data/imdb-5000-movie-dataset.zip```
 
-Running the server
-------------------
+Running the server (development)
+--------------------------------
 
 Use any of the following:
-* ```$ flask run```
-* ```$ python run.py```
+* ```(venv)$ flask run```
+* ```(venv)$ python run.py```
+
+
+Running the server (production)
+-------------------------------
+
+(venv)$ gunicorn -w 4 -b 127.0.0.1:5000 movie_recommendations:app
